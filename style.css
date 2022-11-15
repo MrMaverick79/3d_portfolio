@@ -3,3 +3,32 @@ canvas {
   top: 0;
   left: 0;
 }
+
+body{
+  position: absolute;
+  width: 100vw;
+  z-index: 99;
+  margin: 0px auto;
+
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+
+}
+
+main{
+  position: absolute;
+}
+
+section{ 
+  /* testing */
+
+  /* start at 2 and end at 8 */
+  grid-column: 2 / 8; 
+  width: 25vw;
+  font-size: xx-large;
+  margin: 25vh;
+}
+
+footer{
+   grid-column: 4 / 6;
+}
