@@ -1,7 +1,15 @@
+html{
+ font-family: 'Courier New', Courier, monospace;
+}
+
+
 canvas {
   position: fixed;
   top: 0;
   left: 0;
+  background: rgb(108,4,105);
+  background: linear-gradient(180deg, rgba(108,4,105,1) 0%, rgba(153,114,0,1) 49%, rgba(255,213,0,1) 100%); 
+  
 }
 
 body{
@@ -12,11 +20,13 @@ body{
 
   display: grid;
   grid-template-columns: repeat(12, 1fr);
+  
 
 }
 
 main{
   position: absolute;
+ 
 }
 
 section{ 

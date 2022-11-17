@@ -1,6 +1,6 @@
 import './style.css'
 import * as THREE from 'three';
-import { BoxGeometry, CircleGeometry, PointLightHelper, SpotLightHelper } from 'three';
+import { BoxGeometry, CircleGeometry, MathUtils, PointLightHelper, SpotLightHelper } from 'three';
 import  { OrbitControls } from 'three/examples/jsm/controls/OrbitControls' //Mouse controls
 
 // Making this into a portfolio
@@ -40,10 +40,12 @@ const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerH
 //Attatch to the DOM at the <canvas id="bg">
 const renderer = new THREE.WebGLRenderer({
   canvas: document.querySelector('#bg'),
+  alpha: true,
 
 });
 
 // Set pixel ration and device height
+renderer.setClearColor( 0x000000, 0 );
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight); //full screen
 camera.position.setZ(40);
@@ -85,6 +87,9 @@ scene.add(pointLight, ambientLight)
 
 //We can use light helper to help us during development to see the where the lighht is
 const lightHelper = new THREE.PointLightHelper(pointLight)
+
+const axesHelper = new THREE.AxesHelper( 25 );
+scene.add( axesHelper );
 
 //Grid helper
 //TODO: Can this be expanded to create a neon grid? - No because it is locked to 1 pixel
@@ -171,30 +176,66 @@ for (h = -40; h <= gridSize; h++) {
 group.rotation.y = Math.PI / 4;
 scene.add (group)
 
-// Wireframe cube
+// Wireframe cube(s)?
 
 const cubeGeometry = new THREE.BoxGeometry(10, 10, 10)
 const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true})
 const wireCube = new THREE.Mesh(cubeGeometry, cubeMaterial)
 wireCube.position.setZ(80)
 wireCube.position.setY(50)
-
-
 scene.add( wireCube)
 
+// Random-ish CITY
+let cityGroup = new THREE.Group();
 
+//Establsih size and shape of buildings
+
+function createCity(){
+  
+    
+
+    for (let i = 0; i < 40; i++) {
+      const cityH = MathUtils.randInt(0, 200)
+      const cityW = MathUtils.randInt(15, 20)
+    
+      const cityGeometry = new THREE.PlaneGeometry(cityW, cityH)
+      const cityMaterial = new THREE.MeshBasicMaterial({
+        color:  0x000,
+        side: THREE.DoubleSide
+      })
+      const cityMesh = new THREE.Mesh(cityGeometry, cityMaterial)
+      
+      cityMesh.position.setZ(i*8)
+      cityMesh.rotateY(30)
+      cityGroup.add(cityMesh)
+      
+    }
+    
+    cityGroup.rotateY(Math.PI *  0.7)
+    // cityGroup.rotateY()
+    cityGroup.position.set(-449,0, -260)
+
+    scene.add(cityGroup)
+}
+
+
+createCity()
 
 
 // SUN
+
 const sunGeometry = new THREE.CircleGeometry( 200, 32)
-const sunMaterial = new THREE.MeshBasicMaterial({ color: 0xFFBE00  })
+const sunMaterial = new THREE.MeshBasicMaterial({ 
+  color: 0xFFBE00,  
+})
+
 const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial)
 sunMesh.rotateY(0.75) //Face the camera
 // sunMesh.position.set(-500, 100, -600)
 sunMesh.position.set(-500, 100, -500)
 
 
-//Floor
+//FLOOR
 const floorGeometry = new THREE.PlaneGeometry(5000,  5000);
 const floorMaterial = new THREE.MeshBasicMaterial( {color: 0xFFF, side: THREE.DoubleSide} )
 const floorMesh = new THREE.Mesh(floorGeometry, floorMaterial )
@@ -219,7 +260,7 @@ const meOnABox = new THREE.Mesh(
 
 
 
-//Animate the Torus
+//Animate the wireCube
 function animate(){
   requestAnimationFrame( animate )
     
