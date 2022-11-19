@@ -2,6 +2,9 @@ import './style.css'
 import * as THREE from 'three';
 import { BoxGeometry, CircleGeometry, MathUtils, PointLightHelper, SpotLightHelper } from 'three';
 import  { OrbitControls } from 'three/examples/jsm/controls/OrbitControls' //Mouse controls
+import PalmGenerator from './src/PalmGenerator';
+
+
 
 // Making this into a portfolio
 
@@ -34,7 +37,7 @@ const scene = new THREE.Scene()
 scene.fog = new THREE.Fog(0x400135, 400)
 
 
-//Create a camera
+//CAMERA
 const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000); 
 
 //Attatch to the DOM at the <canvas id="bg">
@@ -44,15 +47,28 @@ const renderer = new THREE.WebGLRenderer({
 
 });
 
-// Set pixel ration and device height
+//Camera and Renderer options
 renderer.setClearColor( 0x000000, 0 );
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight); //full screen
-camera.position.setZ(40);
-camera.position.setY(6);
-camera.position.setX(40); 
+camera.position.setZ(50);
+camera.position.setY(20);
+camera.position.setX(50); 
 
-renderer.render(scene, camera)
+
+//CONTROLS
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.screenSpacePanning = true
+controls.minDistance = 0
+controls.enableKeys = true
+controls.enableZoom = true
+controls.enablePan = false
+controls.maxDistance = 300
+controls.minPolarAngle = Math.PI/5
+controls.maxPolarAngle = Math.PI/2.2
+controls.enableRotate = true
+// controls.target = new THREE.Vector3(0,500,0)
+
 
 //Adding objects
 
@@ -60,6 +76,80 @@ renderer.render(scene, camera)
 //1. Geometry
 //2. material
 //3. Mesh (geometry + mesh)
+
+//TREE
+function createpalmTree(){
+  
+  var geometry = new THREE.BoxGeometry(3.5, 15, 2.5 );
+    geometry.translate(0,.5,0);
+  var material = new THREE.MeshBasicMaterial( {color: 0xffff00, transparent: true, opacity: 0} );
+  var palmTree = new THREE.Mesh( geometry, material );
+  
+  var geometry = new THREE.CylinderGeometry(35, 45, 50, 600
+    );
+  var material = new THREE.MeshNormalMaterial( { color: 0x948C75 } );
+  var palmBase = new THREE.Mesh(geometry, material);
+  palmTree.add(palmBase);
+    
+  var geometry = new THREE.CylinderGeometry(20, 30, 50, 60);
+  var palmBase = new THREE.Mesh(geometry, material);
+   palmBase.position.set(-.25, 40, .0);
+   palmBase.rotation.set(0, 0, .15);
+   palmTree.add(palmBase);
+    
+  var geometry = new THREE.CylinderGeometry(5, 20, 50, 60);
+  var palmBase = new THREE.Mesh(geometry, material);
+    palmBase.position.set(-10, 85, .0);
+    palmBase.rotation.set(0, 0, .35);
+    palmTree.add(palmBase);
+    
+  var geometry = new THREE.CylinderGeometry(0.15, 4, 12, 60);
+    var palmTrunkTop = new THREE.Mesh(geometry, material);
+    palmTrunkTop.position.set(-23, 113, 1);
+    palmTrunkTop.rotation.set(.2, .1, .5);
+    palmTree.add(palmTrunkTop);
+    
+    //LEAVES
+  var leafShape = new THREE.Shape();
+  leafShape.quadraticCurveTo(0, 5.5, 10, 5.5);
+  leafShape.quadraticCurveTo(0, -5.5, 0, 2);
+    
+    var extrudeSettings = {
+    steps: 1,
+    amount: .005,
+    bevelEnabled: true,
+    bevelThickness: .025,
+    bevelSize: .50,
+    bevelSegments: .5
+  };
+  
+  
+  var geometry = new THREE.ExtrudeGeometry( leafShape, extrudeSettings );
+  
+  var material = new THREE.MeshToonMaterial( { color: 0x0CA4A5 } );
+  var Leaf = new THREE.Mesh( geometry, material);
+    Leaf.scale.set(5, 5, 10);
+    Leaf.position.set(-23, 113, 1);
+    Leaf.rotation.set(18.5, 2.5, 2);
+    palmTree.add( Leaf );
+  
+     let pL = Leaf.clone();
+     pL.position.set(-23, 113, 1);
+     pL.rotation.set(8.8, .5, 2);
+     palmTree.add(pL);
+    
+     pL = Leaf.clone();
+     pL.position.set(-23, 113, 1);
+     pL.rotation.set(-.85, -3.5, .5);
+     palmTree.add(pL);
+    
+  
+   
+    scene.add( palmTree );
+    palmTree.scale.set(.35,.35,.35);
+    
+  }
+ createpalmTree()
 
 
 //Example: A 'torus' (donut)
@@ -74,40 +164,31 @@ renderer.render(scene, camera)
 //Add light to the scene
 
 //Example 1: to light up a small area(like a single object)
-const pointLight = new THREE.PointLight(0xffffff);
-pointLight.position.set(20,20,20)
+// const pointLight = new THREE.PointLight(0x9105ff);
+// pointLight.position.set(20,20,20)
 
 // scene.add(pointLight)
 
 //Example 2: Ambient light to light up a whole scene
-const ambientLight = new  THREE.AmbientLight(0xffffff);
-scene.add(pointLight, ambientLight)
+const ambientLight = new THREE.AmbientLight({
+  color: 0x9105ff,
+  intensity: 0.5,
+});
+scene.add(ambientLight)
 
 //#####DEV HELPERS ######
 
 //We can use light helper to help us during development to see the where the lighht is
-const lightHelper = new THREE.PointLightHelper(pointLight)
+// const lightHelper = new THREE.PointLightHelper(pointLight)
 
-const axesHelper = new THREE.AxesHelper( 25 );
-scene.add( axesHelper );
+// const axesHelper = new THREE.AxesHelper( 25 );
+// scene.add( axesHelper );
 
 //Grid helper
 //TODO: Can this be expanded to create a neon grid? - No because it is locked to 1 pixel
 // const gridHelper = new THREE.GridHelper(200,50);
-scene.add(lightHelper);
+// scene.add(lightHelper);
 
-//CONTROLS
-const controls = new OrbitControls(camera, renderer.domElement);
-
-controls.screenSpacePanning = true
-// controls.minDistance = 300
-controls.enableKeys = true
-controls.enableZoom = true
-controls.enablePan = false
-controls.maxDistance = 300
-controls.minPolarAngle = Math.PI/5
-controls.maxPolarAngle = Math.PI/2.2
-controls.enableRotate = true
 
 //Testing
 const hyperGeometry = new THREE.PlaneGeometry(1000, 1)
@@ -185,7 +266,7 @@ wireCube.position.setZ(80)
 wireCube.position.setY(50)
 scene.add( wireCube)
 
-// Random-ish CITY
+//CITY
 let cityGroup = new THREE.Group();
 
 //Establsih size and shape of buildings
@@ -258,6 +339,7 @@ const meOnABox = new THREE.Mesh(
   
 )
 
+renderer.render(scene, camera)
 
 
 //Animate the wireCube
@@ -275,25 +357,27 @@ animate();
 
 //Set up camera to move on scroll
 
-function moveCamera(){
+// function moveCamera(){
  
-    //Get the current position of the TOP  of the viewport. ALways returns a negative, thus the x * -n in the camera positions
-    const t = document.body.getBoundingClientRect().top;
+//     //Get the current position of the TOP  of the viewport. ALways returns a negative, thus the x * -n in the camera positions
+//     const t = document.body.getBoundingClientRect().top*2
+  
 
-    meOnABox.rotation.y += 0.01;
-    meOnABox.rotation.z += 0.01;
+//     meOnABox.rotation.y += 0.01;
+//     meOnABox.rotation.z += 0.01;
     
-    camera.position.z = t * -0.01;
-    camera.position.x = t * -0.0002;
-    camera.position.y = t * -0.0002;
+  
+//     camera.position.x = t* -0.005;
+//     camera.position.y = t* -0.005;
+//     camera.position.z = t * -0.005;
    
 
 
 
-}
+// }
 
 
-document.body.onscroll = moveCamera //Fires every time the user scrolls
+// document.body.onscroll = moveCamera //Fires every time the user scrolls
 
 
 
