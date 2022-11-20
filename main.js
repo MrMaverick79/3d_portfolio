@@ -78,34 +78,56 @@ controls.enableRotate = true
 //3. Mesh (geometry + mesh)
 
 //TREE
-function createpalmTree(){
+
+//Set variable for x y z  so we can generate multiple
+//TODO add one more segment and straighten
+
+
+function createpalmTree(x,y,z, rot){
   
-  var geometry = new THREE.BoxGeometry(3.5, 15, 2.5 );
-    geometry.translate(0,.5,0);
+   
+  var geometry = new THREE.BoxGeometry(100, 100, 25 );
+  // geometry.translate(0,50,100);
   var material = new THREE.MeshBasicMaterial( {color: 0xffff00, transparent: true, opacity: 0} );
   var palmTree = new THREE.Mesh( geometry, material );
+
   
+
+  //Base
   var geometry = new THREE.CylinderGeometry(35, 45, 50, 600
     );
   var material = new THREE.MeshNormalMaterial( { color: 0x948C75 } );
   var palmBase = new THREE.Mesh(geometry, material);
   palmTree.add(palmBase);
+
+  //Segment 1
+  var geometry = new THREE.CylinderGeometry(25, 35, 50, 400
+    );
+  var material = new THREE.MeshNormalMaterial( { color: 0x948C75 } );
+  var palmMidLow = new THREE.Mesh(geometry, material);
+  palmMidLow.position.set(-.25,40, .0);
+  palmTree.add(palmMidLow);
     
-  var geometry = new THREE.CylinderGeometry(20, 30, 50, 60);
-  var palmBase = new THREE.Mesh(geometry, material);
-   palmBase.position.set(-.25, 40, .0);
-   palmBase.rotation.set(0, 0, .15);
-   palmTree.add(palmBase);
-    
-  var geometry = new THREE.CylinderGeometry(5, 20, 50, 60);
-  var palmBase = new THREE.Mesh(geometry, material);
-    palmBase.position.set(-10, 85, .0);
-    palmBase.rotation.set(0, 0, .35);
-    palmTree.add(palmBase);
-    
+  //Segment II
+  var geometry = new THREE.CylinderGeometry(15, 24, 50, 60);
+  var palmMid = new THREE.Mesh(geometry, material);
+   palmMid.position.set(-.25, 85, 0);
+   palmMid.rotation.set(0, 0, 0);
+   palmTree.add(palmMid);
+  
+   //TOP Segment
+  var geometry = new THREE.CylinderGeometry(5, 10, 30, 60);
+  var palmTop = new THREE.Mesh(geometry, material);
+    palmTop.position.set(-10, 123, .0);
+    palmTop.rotation.set(0, 0, .35);
+    palmTree.add(palmTop);
+
+
+  
+  //TIP 
   var geometry = new THREE.CylinderGeometry(0.15, 4, 12, 60);
     var palmTrunkTop = new THREE.Mesh(geometry, material);
-    palmTrunkTop.position.set(-23, 113, 1);
+    palmTrunkTop.position.set(-18, 140, 1);
     palmTrunkTop.rotation.set(.2, .1, .5);
     palmTree.add(palmTrunkTop);
     
@@ -126,30 +148,57 @@ function createpalmTree(){
   
   var geometry = new THREE.ExtrudeGeometry( leafShape, extrudeSettings );
   
-  var material = new THREE.MeshToonMaterial( { color: 0x0CA4A5 } );
+  var material = new THREE.MeshNormalMaterial( { color: 0x0CA4A5 } );
   var Leaf = new THREE.Mesh( geometry, material);
     Leaf.scale.set(5, 5, 10);
-    Leaf.position.set(-23, 113, 1);
+    Leaf.position.set(-23, 148, 1);
     Leaf.rotation.set(18.5, 2.5, 2);
     palmTree.add( Leaf );
   
      let pL = Leaf.clone();
-     pL.position.set(-23, 113, 1);
+     pL.position.set(-23, 148, 1);
      pL.rotation.set(8.8, .5, 2);
      palmTree.add(pL);
     
      pL = Leaf.clone();
-     pL.position.set(-23, 113, 1);
+     pL.position.set(-23, 148, 1);
      pL.rotation.set(-.85, -3.5, .5);
      palmTree.add(pL);
     
   
-   
+    palmTree.position.set(x,y,z)
+    palmTree.rotateY(rot)
     scene.add( palmTree );
     palmTree.scale.set(.35,.35,.35);
     
+    
+    
   }
- createpalmTree()
+  let x = 50;
+  let y = 8;
+  let z = -100;
+
+  let xa = 0;
+  let ya = 8;
+  let za = -140;
+
+  let xb = 100;
+  let yb = 8;
+  let zb = -60;
+ 
+function createWestGrove(){
+  let x = 200;
+  let y= 8;
+  let z = 20
+  for (let i = 0; i < 8; i++) {
+    createpalmTree(x,y,z, 89)
+    x -= 50;
+    z -=40
+    
+  }
+
+}
+createWestGrove()
 
 
 //Example: A 'torus' (donut)
