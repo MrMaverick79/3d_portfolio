@@ -192,7 +192,7 @@ function createWestGrove(){
   let z = 20
   for (let i = 0; i < 8; i++) {
     createpalmTree(x,y,z, 89)
-    x -= 50;
+    x -= 45;
     z -=40
     
   }
@@ -200,6 +200,20 @@ function createWestGrove(){
 }
 createWestGrove()
 
+function createEastGrove(){
+  let x = 60;
+  let y = 8;
+  let z= 155;
+  for (let i = 0; i < 8; i++) {
+    createpalmTree(x,y,z, 4)
+    x -= 45;
+    z -= 48
+    
+  }
+
+}
+
+createEastGrove()
 
 //Example: A 'torus' (donut)
 // const geometry = new THREE.TorusGeometry(10, 3 , 16, 100)
