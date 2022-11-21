@@ -51,22 +51,23 @@ const renderer = new THREE.WebGLRenderer({
 renderer.setClearColor( 0x000000, 0 );
 renderer.setPixelRatio(window.devicePixelRatio);
 renderer.setSize(window.innerWidth, window.innerHeight); //full screen
-camera.position.setZ(50);
+camera.position.setZ(0);
 camera.position.setY(20);
-camera.position.setX(50); 
+camera.position.setX(0); 
+camera.lookAt(-550,10,-400)
 
 
-//CONTROLS
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.screenSpacePanning = true
-controls.minDistance = 0
-controls.enableKeys = true
-controls.enableZoom = true
-controls.enablePan = false
-controls.maxDistance = 300
-controls.minPolarAngle = Math.PI/5
-controls.maxPolarAngle = Math.PI/2.2
-controls.enableRotate = true
+//CONTROLS - need to be switched off for site
+// const controls = new OrbitControls(camera, renderer.domElement);
+// controls.screenSpacePanning = true
+// controls.minDistance = 0
+// controls.enableKeys = true
+// controls.enableZoom = true
+// controls.enablePan = false
+// controls.maxDistance = 300
+// controls.minPolarAngle = Math.PI/5
+// controls.maxPolarAngle = Math.PI/2.2
+// controls.enableRotate = true
 // controls.target = new THREE.Vector3(0,500,0)
 
 
@@ -78,10 +79,6 @@ controls.enableRotate = true
 //3. Mesh (geometry + mesh)
 
 //TREE
-
-//Set variable for x y z  so we can generate multiple
-//TODO add one more segment and straighten
-
 
 function createpalmTree(x,y,z, rot){
   
@@ -174,26 +171,16 @@ function createpalmTree(x,y,z, rot){
     
     
   }
-  let x = 50;
-  let y = 8;
-  let z = -100;
 
-  let xa = 0;
-  let ya = 8;
-  let za = -140;
-
-  let xb = 100;
-  let yb = 8;
-  let zb = -60;
  
 function createWestGrove(){
   let x = 200;
   let y= 8;
   let z = 20
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 7; i++) {
     createpalmTree(x,y,z, 89)
-    x -= 45;
-    z -=40
+    x -= 90;
+    z -= 80
     
   }
 
@@ -204,10 +191,10 @@ function createEastGrove(){
   let x = 60;
   let y = 8;
   let z= 155;
-  for (let i = 0; i < 8; i++) {
+  for (let i = 0; i < 7; i++) {
     createpalmTree(x,y,z, 4)
-    x -= 45;
-    z -= 48
+    x -= 90;
+    z -= 86
     
   }
 
@@ -322,12 +309,12 @@ scene.add (group)
 
 // Wireframe cube(s)?
 
-const cubeGeometry = new THREE.BoxGeometry(10, 10, 10)
-const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true})
-const wireCube = new THREE.Mesh(cubeGeometry, cubeMaterial)
-wireCube.position.setZ(80)
-wireCube.position.setY(50)
-scene.add( wireCube)
+// const cubeGeometry = new THREE.BoxGeometry(10, 10, 10)
+// const cubeMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true})
+// const wireCube = new THREE.Mesh(cubeGeometry, cubeMaterial)
+// wireCube.position.setZ(80)
+// wireCube.position.setY(50)
+// scene.add( wireCube)
 
 //CITY
 let cityGroup = new THREE.Group();
@@ -336,8 +323,6 @@ let cityGroup = new THREE.Group();
 
 function createCity(){
   
-    
-
     for (let i = 0; i < 40; i++) {
       const cityH = MathUtils.randInt(0, 200)
       const cityW = MathUtils.randInt(15, 20)
@@ -357,18 +342,17 @@ function createCity(){
     
     cityGroup.rotateY(Math.PI *  0.7)
     // cityGroup.rotateY()
-    cityGroup.position.set(-449,0, -260)
+    cityGroup.position.set(-550,0, -340)
 
     scene.add(cityGroup)
 }
-
 
 createCity()
 
 
 // SUN
 
-const sunGeometry = new THREE.CircleGeometry( 200, 32)
+const sunGeometry = new THREE.CircleGeometry( 250, 32)
 const sunMaterial = new THREE.MeshBasicMaterial({ 
   color: 0xFFBE00,  
 })
@@ -376,7 +360,7 @@ const sunMaterial = new THREE.MeshBasicMaterial({
 const sunMesh = new THREE.Mesh(sunGeometry, sunMaterial)
 sunMesh.rotateY(0.75) //Face the camera
 // sunMesh.position.set(-500, 100, -600)
-sunMesh.position.set(-500, 100, -500)
+sunMesh.position.set(-600, 100, -600)
 
 
 //FLOOR
@@ -397,21 +381,43 @@ scene.add(sunMesh, floorMesh)
 const meTexture = new THREE.TextureLoader().load('./profile.jpg');
 
 const meOnABox = new THREE.Mesh(
-  new THREE.BoxGeometry(3,3,3),
+  new THREE.BoxGeometry(10,10,10),
   new THREE.MeshBasicMaterial({ map: meTexture})
   
 )
+meOnABox.position.set(30, 20, 20)
+scene.add(meOnABox)
 
-renderer.render(scene, camera)
+
+//Add box with recent projects
+  //create shape
+  const geometry = new THREE.BoxGeometry(15, 15, 15);
+  const loader = new THREE.TextureLoader();
+  const cubeMaterials = [
+      new THREE.MeshBasicMaterial({  map: loader.load('./goodpoint.png') ,transparent:true, side:THREE.DoubleSide}), //right side
+      new THREE.MeshBasicMaterial({  map: loader.load('./hookie.png') ,transparent:true, side:THREE.DoubleSide}), //right side
+      new THREE.MeshBasicMaterial({  map: loader.load('./shrtUrl.png') ,transparent:true, side:THREE.DoubleSide}), //right side
+      new THREE.MeshBasicMaterial({  map: loader.load('./ttt.png') ,transparent:true, side:THREE.DoubleSide}), //right side
+      new THREE.MeshBasicMaterial({  map: loader.load('yam.png') ,transparent:true, side:THREE.DoubleSide}), //right side
+      new THREE.MeshBasicMaterial({  map: loader.load('shrtUrl.png') ,transparent:true, side:THREE.DoubleSide}), //right side
+  ];
+
+ //create material, color, or image texture
+
+ let projectCube = new THREE.Mesh(geometry, cubeMaterials);
+ projectCube.position.set(50,15, 70)
+ scene.add(projectCube);
+
+// renderer.render(scene, camera)
 
 
 //Animate the wireCube
 function animate(){
   requestAnimationFrame( animate )
     
-  wireCube.rotation.x += 0.01;
-  wireCube.rotation.z += 0.005;
-  wireCube.rotation.y += 0.01;
+  projectCube.rotation.x += 0.005;
+  projectCube.rotation.z += 0.005;
+  projectCube.rotation.y += 0.01;
 
   renderer.render(scene, camera)
 };
@@ -420,27 +426,27 @@ animate();
 
 //Set up camera to move on scroll
 
-// function moveCamera(){
+function moveCamera(){
  
-//     //Get the current position of the TOP  of the viewport. ALways returns a negative, thus the x * -n in the camera positions
-//     const t = document.body.getBoundingClientRect().top*2
+    //Get the current position of the TOP  of the viewport. ALways returns a negative, thus the x * -n in the camera positions
+    const t = document.body.getBoundingClientRect().top*2
   
 
-//     meOnABox.rotation.y += 0.01;
-//     meOnABox.rotation.z += 0.01;
+    meOnABox.rotation.y += 0.08;
+    meOnABox.rotation.z += 0.06;
     
   
-//     camera.position.x = t* -0.005;
-//     camera.position.y = t* -0.005;
-//     camera.position.z = t * -0.005;
+    camera.position.x = t * -0.025;
+    // camera.position.y = t * -0.005;
+    camera.position.z = t * -0.025;
    
 
 
 
-// }
+}
 
 
-// document.body.onscroll = moveCamera //Fires every time the user scrolls
+document.body.onscroll = moveCamera //Fires every time the user scrolls
 
 
 

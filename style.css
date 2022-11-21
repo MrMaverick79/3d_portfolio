@@ -1,6 +1,11 @@
+@import url('https://fonts.googleapis.com/css2?family=DotGothic16&display=swap');
+
 html{
- font-family: 'Courier New', Courier, monospace;
+  font-family: 'DotGothic16', sans-serif;
+  color: rgb(1, 255, 1);
 }
+
+
 
 
 canvas {
@@ -36,6 +41,13 @@ h1{
   font-size: 14em;
   letter-spacing: -0.18em;
   line-height: 0.2em;
+}
+
+h2{
+  font-family: Vapor;
+  font-size: 6em;
+  margin: 0 auto;
+  line-height: 0;
 }
 
 #brendan{
@@ -85,15 +97,13 @@ h1{
 
   }
   
-
-
 @keyframes brendanIn {
   from {
-    /* pushes the sun down past the viewport */
+    
     transform: translateX(110vh);
   }
   to {
-    /* returns the sun to its default position */
+   
     visibility: visible;
     transform: translateX(0);
   }
@@ -124,17 +134,44 @@ h1{
 
 main{
   position: absolute;
+  margin-left: 0.5em;
  
 }
 
-section{ 
+.content{
+
+  width: 80vw;
+  z-index: 99;
+  margin: 0px auto;
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  grid-template-rows: 2fr;
+
+}
+
+
+.about{ 
   /* testing */
 
   /* start at 2 and end at 8 */
   grid-column: 2 / 8; 
-  width: 25vw;
+  width: 50vw;
   font-size: xx-large;
-  margin: 25vh;
+  margin-left: 5vw;
+  margin-top: 25vh
+}
+
+.work{ 
+  /* testing */
+
+  /* start at 2 and end at 8 */
+  grid-column: 8 / 10; 
+  grid-row: 2 /2;
+  width: 50vw;
+  font-size: xx-large;
+  margin-left: 5vw;
+  margin-top: 25vh;
+  margin-bottom: 25vh;
 }
 
 footer{
